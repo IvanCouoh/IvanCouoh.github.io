@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <title>Ejercicio 3 Generador de formularios Javier Herrera - Jorge Sanguinetti</title>
+
+    <!-- CSS -->
+    <style>
+        * {
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px auto;
+            grid-template-rows: 50px auto;
+            grid-template-areas:
+                "aside header"
+                "aside main";
+            height: 100vh;
+        }
+
+        .header {
+            background-color: #fff;
+            grid-area: header;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: calc(100% - 250px);
+        }
+
+        .header_title {
+            text-align: center;
+            margin-top: 5px;
+            height: 50px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+        }
+
+
+        .aside {
+            background-color: #223a54;
+            grid-area: aside;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            width: 250px;
+            height: 100%;
+        }
+
+        .aside_title {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .aside_controls {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .aside_controls p {
+            color: #fff;
+            text-align: center;
+            font-size: 14pt;
+            margin: 10px 0 -10px 0;
+        }
+
+        .control {
+            margin-top: 15px;
+            height: 40px;
+            width: 100%;
+            border: none;
+            border-radius: 7px;
+            font-size: 12pt;
+            outline: none;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #fff;
+            background-color: #f5882b;
+        }
+
+        .control:hover {
+            color: #f5882b;
+            background-color: #fff;
+            border: 2px solid #f5882b;
+        }
+
+        .main {
+            background-color: #e9e9e9;
+            grid-area: main;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 35px;
+            width: 40%;
+            margin: auto;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .form p {
+            text-align: center;
+            font-size: 15pt;
+        }
+
+        .form h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        #container_inputs {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0 10px;
+        }
+
+        .reset_form {
+            margin-top: 15px;
+            color: #ff0000;
+            background-color: #fff;
+            height: 40px;
+            font-size: 12pt;
+            padding: 10px;
+            outline: none;
+            border: 1px solid #ff0000;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        label {
+            grid-column: 1/3;
+            text-align: start;
+        }
+
+        input {
+            grid-column: 1/2;
+        }
+
+        img {
+            grid-column: 2/3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="header_title">Generador de formularios</h1>
+        </header>
+        <aside class="aside">
+            <h1 class="aside_title">Controles</h1>
+            <div class="aside_controls">
+                <button class="control" onclick="inputText()">Texto</button>
+                <button class="control" onclick="inputNumber()">Número</button>
+                <button class="control" onclick="inputDate()">Fecha</button>
+                <button class="control" onclick="inputFile()">Archivo</button>
+                <button class="control" onclick="inputButton()">Botón</button>
+                <button class="control" onclick="inputCheck()">CheckBox</button>
+                <button class="control" onclick="inputRadio()">Radio</button>
+                <button class="control" onclick="inputSelect()">Lista de selección</button>
+            </div>
+        </aside>
+        <main class="main">
+            <form action="" class="form">
+                <h2>Mi formulario</h2>
+                <div id="container_inputs"></div>
+            </form>
+            <button class="reset_form" onclick="resetFull()">Eliminar formulario</button>
+        </main>
+    </div>
+
+    <!-- Script -->
+    <script>
+        function removeElement(label, input, valor) {
+            const form = document.getElementById('container_inputs')
+            const img = document.createElement('span')
+            img.innerHTML = '<i class="far fa-trash-alt"></i>'
+            img.style.width = '19px'
+            img.style.cursor = 'pointer'
+            img.style.color = 'red'
+            form.appendChild(img)
+            img.addEventListener('click', function () {
+                label.remove()
+                input.remove()
+                img.remove()
+                valor.remove()
+            })
+        }
+
+        function resetFull() {
+            const getForm = document.querySelector('#container_inputs')
+            getForm.innerHTML = ""
+        }
+
+        function inputText() {
+            const form = document.getElementById('container_inputs')
+            const text = document.createElement('label')
+            const createInputText = document.createElement('input')
+            text.innerHTML = "Text"
+            text.style.fontWeight = '600'
+            text.style.marginTop = '10px'
+            createInputText.type = 'text'
+            form.appendChild(text)
+            form.appendChild(createInputText)
+            removeElement(createInputText, text)
+        }
+
+        function inputNumber() {
+            const form = document.getElementById('container_inputs')
+            const text = document.createElement('label')
+            const createInputNumber = document.createElement('input')
+            text.innerHTML = "Number"
+            text.style.fontWeight = '600'
+            text.style.marginTop = '10px'
+            createInputNumber.type = 'number'
+            form.appendChild(text)
+            form.appendChild(createInputNumber)
+            removeElement(createInputNumber, text)
+        }
+
+        function inputDate() {
+            const form = document.getElementById('container_inputs')
+            const text = document.createElement('label')
+            const createInputDate = document.createElement('input')
+            text.innerHTML = "Date"
+            text.style.fontWeight = '600'
+            text.style.marginTop = '10px'
+            createInputDate.type = 'date'
+            form.appendChild(text)
+            form.appendChild(createInputDate)
+            removeElement(createInputDate, text)
+        }
+
+        function inputFile() {
+            const form = document.getElementById('container_inputs')
+            const text = document.createElement('label')
+            const createInputFile = document.createElement('input')
+            text.innerHTML = "File"
+            text.style.fontWeight = '600'
+            text.style.marginTop = '10px'
+            createInputFile.type = 'file'
+            form.appendChild(text)
+            form.appendChild(createInputFile)
+            removeElement(createInputFile, text)
+        }
+
+        function inputButton() {
+            const form = document.getElementById('container_inputs')
+            const text = document.createElement('label')
+            text.innerHTML = "Button"
+            text.style.fontWeight = '600'
+            text.style.marginTop = '10px'
+            const createInputButton = document.createElement('input')
+            createInputButton.type = 'button'
+            createInputButton.value = 'Botón'
+            form.appendChild(text)
+            form.appendChild(createInputButton)
+            removeElement(createInputButton, text)
+        }
+
+        function inputCheck() {
+            const form = document.getElementById('container_inputs')
+            const div = document.createElement('div')
+            const span = document.createElement('span')
+            const text = document.createElement('label')
+            const createInputCheck = document.createElement('input')
+            span.innerHTML = 'Valor'
+            div.style.display = 'flex', div.style.alignItems = 'center', div.style.gap = '10px'
+            text.innerHTML = "CheckBox"
+            text.style.fontWeight = '600'
+            text.style.marginTop = '10px'
+            createInputCheck.type = 'checkbox'
+            form.appendChild(text)
+            div.appendChild(createInputCheck)
+            div.appendChild(span)
+            form.appendChild(div)
+            removeElement(createInputCheck, text, span)
+        }
+
+        function inputRadio() {
+            const form = document.getElementById('container_inputs')
+            const div = document.createElement('div')
+            const span = document.createElement('span')
+            const text = document.createElement('label')
+            const createInputRadio = document.createElement('input')
+            span.innerHTML = 'Valor'
+            div.style.display = 'flex', div.style.alignItems = 'center', div.style.gap = '10px'
+            text.innerHTML = "Radio"
+            text.style.fontWeight = '600'
+            text.style.marginTop = '10px'
+            createInputRadio.type = 'radio'
+            form.appendChild(text)
+            div.appendChild(createInputRadio)
+            div.appendChild(span)
+            form.appendChild(div)
+            removeElement(createInputRadio, text, span)
+        }
+
+        function inputSelect() {
+            const form = document.getElementById('container_inputs')
+            const text = document.createElement('label')
+            const createInputSelect = document.createElement('select')
+            const options = ["Selecciona una opción", "Opción A", "Opción B", "Opción C"];
+            for (let i = 0; i < options.length; i++) {
+                const option = document.createElement('option');
+                option.value = options[i];
+                option.text = options[i];
+                createInputSelect.appendChild(option);
+            }
+            text.innerHTML = "Select"
+            text.style.fontWeight = '600'
+            text.style.marginTop = '10px'
+            form.appendChild(text)
+            form.appendChild(createInputSelect)
+            removeElement(createInputSelect, text)
+        }
+    </script>
+</body>
+
+</html>
